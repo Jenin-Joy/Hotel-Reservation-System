@@ -22,6 +22,7 @@
             <td>No Of Guest</td>
             <td>Amount</td>
             <td>User</td>
+            <td>Room Count</td>
             <td>Meal Pack</td>
             <td>Pick up Pack</td>
             <td>Tour Pack</td>
@@ -42,6 +43,7 @@
                 {% endif %}
             </td>
             <td>{{i.user.user_name}}</td>
+            <td>{{i.no_of_rooms}}</td>
             <td>{{i.mealpackages.mealpackages_name}}</td>
             <td>{{i.pickanddrophead.pickanddrophead_name}}</td>
             <td>{{i.tourpackages.tourpackages_name}}</td>
@@ -54,7 +56,7 @@
                 {% elif i.booking_status == 2 %}
                 Rejected
                 {% elif i.booking_status == 3 %}
-                Payed | <a href="{% url 'Hotel:sentconfirmation' i.id %}">Sent Confirmations</a>
+                Payed | <a href="{% url 'Hotel:sentconfirmation' i.id %}">Sent Confirmations</a> | <a href="{% url 'Hotel:viewbookedrooms' i.id %}">View Rooms</a>
                 {% elif i.booking_status == 4 %}
                 Hotel Accepted
                 {% elif i.booking_status == 5 %}

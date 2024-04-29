@@ -12,13 +12,21 @@ class tbl_booking(models.Model):
     booking_noofguest=models.CharField(max_length=50)
     booking_amount=models.IntegerField(default="0")
     booking_status=models.IntegerField(default="0")
-    booking_floor=models.CharField(max_length=50)
-    roomtype =models.ForeignKey(tbl_roomtype, on_delete=models.CASCADE)
+    no_of_rooms = models.CharField(max_length=30)
+    # booking_floor=models.CharField(max_length=50)
+    # roomtype =models.ForeignKey(tbl_roomtype, on_delete=models.CASCADE)
     user =models.ForeignKey(tbl_user,on_delete=models.CASCADE)
     hotel =models.ForeignKey(tbl_newhotel,on_delete=models.CASCADE)
     tourpackages =models.ForeignKey(tbl_tourpackages, on_delete=models.SET_NULL,null=True)
     mealpackages =models.ForeignKey(tbl_mealpackages, on_delete=models.SET_NULL,null=True)
     pickanddrophead =models.ForeignKey(tbl_pickanddrophead, on_delete=models.SET_NULL,null=True)
+
+class tbl_roombooking(models.Model):
+    roomtype =models.ForeignKey(tbl_roomtype, on_delete=models.CASCADE)
+    booking_floor=models.CharField(max_length=50)
+    booking =models.ForeignKey(tbl_booking,on_delete=models.CASCADE)
+    room_details =models.ForeignKey(tbl_roomdetails,on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)
    
 class tbl_occupants(models.Model):
     occupants_name=models.CharField(max_length=50)

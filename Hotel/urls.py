@@ -34,6 +34,7 @@ urlpatterns = [
     path('sentconfirmation/<int:id>',views.sentconfirmation,name="sentconfirmation"),
 
     path('adddetails/<int:id>',views.adddetails,name="adddetails"),
+    path('viewbookedrooms/<int:bkid>',views.viewbookedrooms,name="viewbookedrooms"),
 
     path('Complaint/',views.complaint,name="complaint"),
     path('MyComplaints/',views.mycomplaints,name="mycomplaints"),

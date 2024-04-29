@@ -11,6 +11,7 @@ class tbl_roomdetails(models.Model):
     hotel =models.ForeignKey(tbl_newhotel,null=True,on_delete=models.CASCADE)
     roomdetails_amount=models.CharField(max_length=50)
     roomdetails_occupancy=models.CharField(max_length=50)
+    status=models.IntegerField(default=0)
 
 
 class tbl_hotelfacility(models.Model):

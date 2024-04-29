@@ -10,109 +10,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NewUser</title>
-    
+
 </head>
 
-<body> 
-    <div id="tab" >
+<body>
+    <div id="tab">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2 align="center"><font color="white">BOOKING</font></h2>
-            <table align="center" style="background-color: white;">
-
-
-
+            <h2 align="center">
+                <font color="white">BOOKING</font>
+            </h2>
+            <input type="hidden" name="txt_hotel" id="txt_hotel" value="{{hotel.id}}">
+            <input type="hidden" name="txt_booking" id="txt_booking" value="{{booking}}">
+            {% for c in count %}
+            <table>
                 <tr>
-                    <td>Check In Date </td>
-                    <td><input type="date" name="txtcheckin"></td>
-                </tr>
-
-                <tr>
-                    <td>Check Out Date</td>
-                    <td><input type="date" name="txtcheckout"></td>
-                </tr>
-
-                <tr>
-                    <td>Number Of Guest</td>
-                    <td><input type="text" name="txtguest" placeholder="Enter No of Guest" ></td>
-                </tr>
-                
-                <tr>
+                    <td>{{forloop.counter}}</td>
                     <td>Floor Number</td>
                     <td>
-                        <select name="txtfloor" id="txtfloor">
+                        <select name="txtfloor{{forloop.counter}}" id="txtfloor{{forloop.counter}}" onchange="selRoomtype('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')">
                             <option value="">Select Floor</option>
                             {% for i in floornumberdata %}
                             <option value="{{i}}">{{i}}</option>
                             {% endfor %}
-    
+
                         </select>
                     </td>
-                </tr>
-
-
-                <tr>
                     <td>Room Type</td>
                     <td>
-                        <select name="sel_roomtype" id="sel_roomtype">
+                        <select name="sel_roomtype{{forloop.counter}}" id="sel_roomtype{{forloop.counter}}" onchange="bookRooms('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')">
                             <option value="">...Select...</option>
-                           
+
                         </select>
                     </td>
                 </tr>
-                
-                
-
+            </table>
+            <br>
+            {% endfor %}
+            <table>
                 <tr>
-                    <td>Meal Package</td>
-                    <td>
-                        <select name="sel_mealpackages" id="sel_mealpackages" >
-                            <option value="">...Select...</option>
-                            {% for i in mealpackagesdata %}
-                            <option value="{{i.id}}">
-                                {{i.mealpackages_name}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    </tr>
-
-                    <tr>
-                        <td>Tour Package</td>
-                        <td>
-                            <select name="sel_tourpackages" id="sel_tourpackages" >
-                                <option value="">...Select...</option>
-                                {% for i in tourpackagesdata %}
-                                <option value="{{i.id}}">
-                                    {{i.tourpackages_name}}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        </tr>
-
-                        <tr>
-                            <td>Pick and Drop Service</td>
-                            <td>
-                                <select name="sel_pickanddrophead" id="sel_pickanddrophead" >
-                                    <option value="">...Select...</option>
-                                    {% for i in pickanddropheaddata %}
-                                    <option value="{{i.id}}">
-                                        {{i.pickanddrophead_name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            </tr>
-
-
-                <tr>
-                    <td colspan="2" align="center">
-                        <input type="submit" name="btnsubmit" value="Save">
-                        <input type="reset" name="btncancel" value="Cancel">
+                    <td align="center">
+                        <input type="submit" name="btnsubmit" style="width: 100px;" value="Save">
                     </td>
                 </tr>
             </table>
         </form>
-
-
     </div>
 </body>
 {% if msg %}
@@ -133,16 +75,36 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-    $("#txtfloor").change(function () {
-        var did = $(this).val();
+    function selRoomtype(floor,room) {
+        // console.log(floor,room);
+        var hotel = document.getElementById("txt_hotel").value
+        var floor_number = document.getElementById(floor).value
+        // console.log(room);
         var ur = "{% url 'User:ajaxroomtype' %}"
         $.ajax({
             url: ur,
-            data: { did: did, },
+            data: { hotel: hotel,floor_number: floor_number },
             success: function (data) {
-                $("#sel_roomtype").html(data);
+                $("#"+room).html(data);
             },
         });
-    });
+    }
+
+    function bookRooms(floor,room) {
+        // console.log(floor,room);
+        var booking = document.getElementById("txt_booking").value
+        var floor_number = document.getElementById(floor).value
+        var room = document.getElementById(room).value
+        // console.log(room);
+        var ur = "{% url 'User:ajaxbookrooms' %}"
+        $.ajax({
+            url: ur,
+            data: { booking: booking,floor_number: floor_number,room: room },
+            success: function (data) {
+                // $("#"+room).html(data);
+                alert(data.msg)
+            },
+        });
+    }
 </script>
 {% endblock content %}

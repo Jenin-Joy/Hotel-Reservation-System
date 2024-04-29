@@ -16,9 +16,11 @@ urlpatterns = [
     path('ViewPickAndDrop/<int:hid>',views.vpickanddrop,name="vpickanddrop"),
 
     path('Booking/<int:hid>',views.booking,name="booking"),
+    path('roombooking/<int:bkid>',views.roombooking,name="roombooking"),
 
     path('mybooking/',views.mybooking,name="mybooking"),
     path('occupants/<int:id>',views.occupants,name="occupants"),
+    path('viewbookedrooms/<int:bkid>',views.viewbookedrooms,name="viewbookedrooms"),
     
     path('Complaint/',views.complaint,name="complaint"),
 
@@ -33,6 +35,10 @@ urlpatterns = [
 
     path('ajaxsearchhotel/',views.ajaxsearchhotel,name="ajaxsearchhotel"),
     path('ViewRooms/<int:id>',views.ViewRooms,name="ViewRooms"),
+
+    path('ajaxroomtype/',views.ajaxroomtype,name="ajaxroomtype"),
+    path('ajaxbookrooms/',views.ajaxbookrooms,name="ajaxbookrooms"),
+
 
     path('cancelbooking/<int:id>',views.cancelbooking,name="cancelbooking"),
 

@@ -20,6 +20,7 @@
             <td>No Of Guest</td>
             <td>Amount</td>
             <td>Hotel</td>
+            <td>No Of Rooms</td>
             <td>Meal Pack</td>
             <td>Pick up Pack</td>
             <td>Tour Pack</td>
@@ -40,11 +41,12 @@
                 {% endif %}
             </td>
             <td>{{i.hotel.hotel_name}}</td>
+            <td>{{i.no_of_rooms}}</td>
             <td>{{i.mealpackages.mealpackages_name}}</td>
             <td>{{i.pickanddrophead.pickanddrophead_name}}</td>
             <td>{{i.tourpackages.tourpackages_name}}</td>
             <td>
-                {% if  i.booking_amount == 0 %}
+                {% if  i.booking_status == 0 %}
                 <span>Pending</span>    | <a href="{% url 'User:occupants' i.id %}">Add Occupents</a>
                 {% elif i.booking_status == 1%}
                 Accepted | <a href="{% url 'User:payment' i.id %}">Make payment</a>
@@ -52,7 +54,7 @@
                 <!-- Rejected -->
                 <span>Rejected</span>
                 {% elif i.booking_status == 3%}
-                Payment Completed | <a href="{% url 'User:rating' i.id %}">Rate</a> | <a href="{% url 'User:cancelbooking' i.id %}">Cancel Booking</a>
+                Payment Completed | <a href="{% url 'User:rating' i.id %}">Rate</a> | <a href="{% url 'User:cancelbooking' i.id %}">Cancel Booking</a> | <a href="{% url 'User:viewbookedrooms' i.id %}">View Rooms</a>
                 {% elif i.booking_status == 4 %}
                 <span>Hotel Accepted</span> | <a href="{% url 'User:rating' i.id %}">Rate</a> | <a href="{% url 'User:cancelbooking' i.id %}">Cancel Booking</a>
                 {% elif i.booking_status == 5 %}

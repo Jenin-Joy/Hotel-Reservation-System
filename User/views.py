@@ -297,59 +297,126 @@ def  vpickanddrop(request,hid):
     pick= tbl_pickanddrophead.objects.filter(hotel=hid)
     return render(request,"User/ViewPickAndDrop.html",{'data':pick,"hotel":hid})
 
+# def booking(request,hid):
+#     roomtype = tbl_roomtype.objects.all()
+#     floorcount=int(request.session["floor"])
+#     floorlist=[ i for i in range(0,floorcount)]
+#     request.session["hotels"]=hid
+#     tourpackages = tbl_tourpackages.objects.filter(hotel=hid)
+#     mealpackages = tbl_mealpackages.objects.filter(hotel=hid)
+#     pickanddrophead = tbl_pickanddrophead.objects.filter(hotel=hid)
+#     book= tbl_booking.objects.filter(hotel=hid)
+#     if request.method=="POST":
+#         roomtypes = request.POST.get("sel_roomtype")
+#         floor = request.POST.get("txtfloor")
+#         roomcount = tbl_roomdetails.objects.get(roomtype=roomtypes,roomdetails_floor=floor,hotel=hid)
+#         rmcount = roomcount.roomdetails_count
+#         bkcount = tbl_booking.objects.filter(roomtype=roomtypes,booking_floor=floor,hotel=hid,booking_status=0,booking_checkin=request.POST.get('txtcheckin'),booking_checkout=request.POST.get('txtcheckout')).count()
+#         if int(rmcount) <= bkcount:
+#             return render(request,"User/Booking.html",{"msg1":"Your Suggested Room in the Floor is Already Booked..","hid":hid})
+#         else:
+#             checkin=request.POST.get('txtcheckin')
+#             checkout=request.POST.get('txtcheckout')
+#             noofguest=request.POST.get('txtguest')
+            
+#             roomtype = tbl_roomtype.objects.get(id=request.POST.get('sel_roomtype'))
+#             floornumber = request.POST.get('txtfloor')
+            
+#             userid=tbl_user.objects.get(id=request.session["uid"])
+#             hotelid=tbl_newhotel.objects.get(id=hid)
+            
+            
+#             mealpackages = tbl_mealpackages.objects.get(id=request.POST.get('sel_mealpackages'))
+#             tourpackages = tbl_tourpackages.objects.get(id=request.POST.get('sel_tourpackages'))
+#             pickanddrophead = tbl_pickanddrophead.objects.get(id=request.POST.get('sel_pickanddrophead'))
+#             sumofcount=0
+#             roomdata=tbl_roomdetails.objects.filter(hotel=hotelid,roomtype=roomtype,roomdetails_floor=floornumber)
+#             for i in roomdata:
+#                 sumofcount=sumofcount+int(i.roomdetails_occupancy)
+#             # print(sumofcount)
+#             if(int(noofguest)<=sumofcount):           
+#                 tbl_booking.objects.create(booking_checkin=checkin,
+#                                        booking_checkout=checkout,
+#                                        booking_noofguest=noofguest,
+#                                        booking_floor=floornumber,
+#                                        hotel=hotelid,
+#                                        roomtype=tbl_roomtype.objects.get(id=request.POST.get('sel_roomtype')),
+#                                        user=userid,
+#                                        mealpackages=mealpackages,
+#                                        tourpackages=tourpackages,
+#                                        pickanddrophead=pickanddrophead)
+#                 return render(request,"User/Booking.html",{"msg":"Sucessfully Booked.."})
+#             else:
+#                 return render(request,"User/Booking.html",{"msg":"Due to More No of Guests its Not Booked "})
+#     else:
+#        return render(request,"User/Booking.html",{'data':book,"hotel":hid,"mealpackagesdata":mealpackages,"tourpackagesdata":tourpackages,"pickanddropheaddata":pickanddrophead,"roomtypedata":roomtype,"floornumberdata":floorlist})
+
 def booking(request,hid):
-    roomtype = tbl_roomtype.objects.all()
-    floorcount=int(request.session["floor"])
-    floorlist=[ i for i in range(0,floorcount)]
-    request.session["hotels"]=hid
     tourpackages = tbl_tourpackages.objects.filter(hotel=hid)
     mealpackages = tbl_mealpackages.objects.filter(hotel=hid)
     pickanddrophead = tbl_pickanddrophead.objects.filter(hotel=hid)
-    book= tbl_booking.objects.filter(hotel=hid)
-    if request.method=="POST":
-        roomtypes = request.POST.get("sel_roomtype")
-        floor = request.POST.get("txtfloor")
-        roomcount = tbl_roomdetails.objects.get(roomtype=roomtypes,roomdetails_floor=floor,hotel=hid)
-        rmcount = roomcount.roomdetails_count
-        bkcount = tbl_booking.objects.filter(roomtype=roomtypes,booking_floor=floor,hotel=hid,booking_status=0,booking_checkin=request.POST.get('txtcheckin'),booking_checkout=request.POST.get('txtcheckout')).count()
-        if int(rmcount) <= bkcount:
-            return render(request,"User/Booking.html",{"msg1":"Your Suggested Room in the Floor is Already Booked..","hid":hid})
-        else:
-            checkin=request.POST.get('txtcheckin')
-            checkout=request.POST.get('txtcheckout')
-            noofguest=request.POST.get('txtguest')
-            
-            roomtype = tbl_roomtype.objects.get(id=request.POST.get('sel_roomtype'))
-            floornumber = request.POST.get('txtfloor')
-            
-            userid=tbl_user.objects.get(id=request.session["uid"])
-            hotelid=tbl_newhotel.objects.get(id=hid)
-            
-            
-            mealpackages = tbl_mealpackages.objects.get(id=request.POST.get('sel_mealpackages'))
-            tourpackages = tbl_tourpackages.objects.get(id=request.POST.get('sel_tourpackages'))
-            pickanddrophead = tbl_pickanddrophead.objects.get(id=request.POST.get('sel_pickanddrophead'))
-            sumofcount=0
-            roomdata=tbl_roomdetails.objects.filter(hotel=hotelid,roomtype=roomtype,roomdetails_floor=floornumber)
-            for i in roomdata:
-                sumofcount=sumofcount+int(i.roomdetails_occupancy)
-            # print(sumofcount)
-            if(int(noofguest)<=sumofcount):           
-                tbl_booking.objects.create(booking_checkin=checkin,
-                                       booking_checkout=checkout,
-                                       booking_noofguest=noofguest,
-                                       booking_floor=floornumber,
-                                       hotel=hotelid,
-                                       roomtype=tbl_roomtype.objects.get(id=request.POST.get('sel_roomtype')),
-                                       user=userid,
-                                       mealpackages=mealpackages,
-                                       tourpackages=tourpackages,
-                                       pickanddrophead=pickanddrophead)
-                return render(request,"User/Booking.html",{"msg":"Sucessfully Booked.."})
-            else:
-                return render(request,"User/Booking.html",{"msg":"Due to More No of Guests its Not Booked "})
+    if request.method == "POST":
+        checkin=request.POST.get('txtcheckin')
+        checkout=request.POST.get('txtcheckout')
+        noofguest=request.POST.get('txtguest')
+        userid=tbl_user.objects.get(id=request.session["uid"])
+        hotelid=tbl_newhotel.objects.get(id=hid)
+        mealpackages = tbl_mealpackages.objects.get(id=request.POST.get('sel_mealpackages'))
+        tourpackages = tbl_tourpackages.objects.get(id=request.POST.get('sel_tourpackages'))
+        pickanddrophead = tbl_pickanddrophead.objects.get(id=request.POST.get('sel_pickanddrophead'))
+        bk = tbl_booking.objects.create(booking_checkin=checkin,
+                                booking_checkout=checkout,
+                                booking_noofguest=noofguest,
+                                hotel=hotelid,
+                                no_of_rooms = request.POST.get("txt_count"),
+                                user=userid,
+                                mealpackages=mealpackages,
+                                tourpackages=tourpackages,
+                                pickanddrophead=pickanddrophead)
+        return redirect("User:roombooking",bk.id)
     else:
-       return render(request,"User/Booking.html",{'data':book,"hotel":hid,"mealpackagesdata":mealpackages,"tourpackagesdata":tourpackages,"pickanddropheaddata":pickanddrophead,"roomtypedata":roomtype,"floornumberdata":floorlist})
+        return render(request,"User/RoomCount.html",{"mealpackagesdata":mealpackages,"tourpackagesdata":tourpackages,"pickanddropheaddata":pickanddrophead})
+
+def roombooking(request,bkid):
+    booking = tbl_booking.objects.get(id=bkid)
+    bk_count = booking.no_of_rooms
+    hotel = booking.hotel_id
+    hotel = tbl_newhotel.objects.get(id=booking.hotel_id)
+    floorcount=int(hotel.hotel_floor)
+    floorlist=[ i for i in range(0,floorcount)]
+    count = [i for i in range(0,int(bk_count))]
+    if request.method == "POST":
+        bk = tbl_booking.objects.get(id=bkid)
+        amount = 0
+        rooms = tbl_roombooking.objects.filter(booking=bkid,status=0)
+        for r in rooms:
+            amount = amount + int(r.room_details.roomdetails_amount)
+            r.status = 1
+            r.save()
+            # print(amount)
+        bk.booking_amount = amount
+        bk.save()
+        return redirect("User:homepage")
+    else:
+        return render(request,"User/Booking.html",{"count":count,"floornumberdata":floorlist,"hotel":hotel,"booking":bkid})
+
+def ajaxbookrooms(request):
+    bk = tbl_booking.objects.get(id=request.GET.get("booking"))
+    hotel = bk.hotel_id
+    # print(hotel)
+    rmdetails = tbl_roomdetails.objects.filter(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"),status=0).count()
+    # print(rmdetails)
+    if rmdetails > 0:
+        rm = tbl_roomdetails.objects.get(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"),status=0)
+        rm.status = 1
+        rm.save()
+        tbl_roombooking.objects.create(booking_floor=request.GET.get("floor_number"),
+                                    booking=tbl_booking.objects.get(id=request.GET.get("booking")),
+                                    roomtype=tbl_roomtype.objects.get(id=request.GET.get("room")),
+                                    room_details=tbl_roomdetails.objects.get(id=rm.id))
+        return JsonResponse({"msg":"Room Selected"})
+    else:
+        return JsonResponse({"msg":"Not Room Available"})
 
 def mybooking(request):
     if 'uid' in request.session:
@@ -357,6 +424,16 @@ def mybooking(request):
         return render(request,"User/My_booking.html",{"data":booking})
     else:
         return redirect("Guest:Login")
+
+def viewbookedrooms(request,bkid):
+    rooms = tbl_roombooking.objects.filter(booking=bkid,status=1)
+    rmids = []
+    for r in rooms:
+        rm = tbl_room_description.objects.get(room=r.room_details_id)
+        rmids.append(rm.id)
+    # print(rmids)
+    rmphoto = tbl_room_description.objects.filter(id__in=rmids)
+    return render(request,"User/View_Booked_Rooms.html",{"data":rmphoto})
 
 def occupants(request,id):
     bk = tbl_booking.objects.get(id=id)
@@ -427,8 +504,8 @@ def logout(request):
     return redirect("Guest:Login")
 
 def ajaxroomtype(request):
-    hoteldata=tbl_newhotel.objects.get(id=request.session["hotels"])
-    floordata=request.GET.get('did')
+    hoteldata=tbl_newhotel.objects.get(id=request.GET.get("hotel"))
+    floordata=request.GET.get('floor_number')
     srooms=tbl_roomdetails.objects.filter(hotel=hoteldata,roomdetails_floor=floordata)
     parray=[]
     for i in srooms:
@@ -513,6 +590,11 @@ def ViewRooms(request,id):
 
 def cancelbooking(request,id):
     bk = tbl_booking.objects.get(id=id)
+    room = tbl_roombooking.objects.filter(booking=id,status=1) 
+    for r in room:
+        rmdetails = tbl_roomdetails.objects.get(id=r.room_details_id)
+        rmdetails.status = 0
+        rmdetails.save()
     bk.booking_status = 6
     bk.save()
     email = bk.user.user_email

@@ -191,13 +191,14 @@ def acceptbooking(request,aid):
     meal=tbl_mealpackages.objects.get(id=data.mealpackages.id)
     pickup=tbl_pickanddrophead.objects.get(id=data.pickanddrophead.id)
     tour=tbl_tourpackages.objects.get(id=data.tourpackages.id)
-    rtpe=tbl_roomtype.objects.get(id=data.roomtype.id)
+    # rtpe=tbl_roomtype.objects.get(id=data.roomtype.id)
     hotelid=tbl_newhotel.objects.get(id=data.hotel.id)
 
-    rom=tbl_roomdetails.objects.filter(roomtype=rtpe,hotel=hotelid).last()
+    # rom=tbl_roomdetails.objects.filter(roomtype=rtpe,hotel=hotelid).last()
     
-    amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)+int(rom.roomdetails_amount)
-    data.booking_amount=amounts
+    amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
+    oldamount = data.booking_amount
+    data.booking_amount=oldamount + amounts
     data.booking_status=1
     data.save()
     return redirect("Hotel:userbooking")
@@ -207,8 +208,22 @@ def rejectbooking(request,rid):
     data.save()
     return redirect("Hotel:userbooking")
 
+def viewbookedrooms(request,bkid):
+    rooms = tbl_roombooking.objects.filter(booking=bkid,status=1)
+    rmids = []
+    for r in rooms:
+        rm = tbl_room_description.objects.get(room=r.room_details_id)
+        rmids.append(rm.id)
+    # print(rmids)
+    rmphoto = tbl_room_description.objects.filter(id__in=rmids)
+    return render(request,"Hotel/View_Booked_Rooms.html",{"data":rmphoto})
+
 def sentconfirmation(request,id):
     booking = tbl_booking.objects.get(id=id)
+    roombooking = tbl_roombooking.objects.filter(booking=id)
+    room_name = []
+    for r in roombooking:
+        room_name.append(r.room_details.roomtype.roomtype_type)
     user = booking.user.user_name
     user_email = booking.user.user_email
     checkin = booking.booking_checkin
@@ -218,14 +233,15 @@ def sentconfirmation(request,id):
     mealpack = booking.mealpackages.mealpackages_name
     tourpack = booking.tourpackages.tourpackages_name
     pickpack = booking.pickanddrophead.pickanddrophead_name
-    room = booking.roomtype.roomtype_type
+    # room = booking.roomtype.roomtype_type
+    room = booking.no_of_rooms
     hotal_name = booking.hotel.hotel_name
     hotal_contact = booking.hotel.hotel_contact
     hotal_email = booking.hotel.hotel_email
     hotal_address = booking.hotel.hotel_addr
     hotel_url = booking.hotel.hotel_url
     bkno = random.randint(111111,999999)
-    print(user_email)
+    # print(user_email)
     if pickpack:
         send_mail(
             f"Dear {user}",  # Subject
@@ -237,7 +253,8 @@ def sentconfirmation(request,id):
             f"Check-in Date: {checkin}\r\n"
             f"Check-out Date: {checkout}\r\n"
             f"Number of Guests: {nfg}\r\n"
-            f"Room Type: {room}\r\n"
+            f"Room Count: {room}\r\n"
+            f"Rooms: {room_name}\r\n"
             f"Meal Package: {mealpack}\r\n"
             f"Tour Package: {tourpack}\r\n"
             f"Total Amount: {amount}\r\n"
@@ -263,7 +280,8 @@ def sentconfirmation(request,id):
             f"Check-in Date: {checkin}\r\n"
             f"Check-out Date: {checkout}\r\n"
             f"Number of Guests: {nfg}\r\n"
-            f"Room Type: {room}\r\n"
+            f"Room Count: {room}\r\n"
+            f"Rooms: {room_name}\r\n"
             f"Meal Package: {mealpack}\r\n"
             f"Tour Package: {tourpack}\r\n"
             f"Total Amount: {amount}\r\n"
