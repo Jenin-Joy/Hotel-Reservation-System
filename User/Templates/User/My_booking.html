@@ -61,6 +61,8 @@
                 <span>Admin Accepted</span> | <a href="{% url 'User:rating' i.id %}">Rate</a> | <a href="{% url 'User:cancelbooking' i.id %}">Cancel Booking</a>
                 {% elif i.booking_status == 6 %}
                 <span>Booking Cancelled</span>
+                {% elif i.booking_status == 7 %}
+                <span>Check Out</span>
                 {% else %}
                 {% endif %}
             </td>

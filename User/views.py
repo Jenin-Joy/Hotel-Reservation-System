@@ -280,7 +280,7 @@ def viewmore(request,hid):
     for i in roomdetails:
         roomdetails_id.append(i.id)
     # print(roomdetails_id)
-    rm_details = tbl_roomdetails.objects.filter(id__in=roomdetails_id)
+    rm_details = tbl_roomdetails.objects.filter(id__in=roomdetails_id,status=0)
     return render(request,"User/HotelDetailViewMore.html",{'data':data,'data1':data1,"id":hid,"facility":facility,"roomdetails":rm_details,"common":common_fac})
  else:
     return redirect("Guest:Login")

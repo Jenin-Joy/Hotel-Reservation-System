@@ -137,3 +137,179 @@ def viewmore(request,hid):
     # print(roomdetails_id)
     rm_details = tbl_roomdetails.objects.filter(id__in=roomdetails_id)
     return render(request,"Guest/HotelDetailViewMore.html",{'data':data,'data1':data1,"id":hid,"facility":facility,"roomdetails":rm_details,"common":common_fac})
+
+def ajaxsearchhotel(request):
+    ar=[1,2,3,4,5]
+    parry=[]
+    avg=0
+    if ((request.GET.get("pid")!="") & (request.GET.get("rate")!="") & (request.GET.get("spe")!="")):
+        data = tbl_newhotel.objects.filter(place=tbl_place.objects.get(id=request.GET.get("pid")),hotel_vstatus='1',hotel_ratings=request.GET.get("rate"),hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif ((request.GET.get("did")!="") & (request.GET.get("rate")!="") & (request.GET.get("spe")!="")):
+        data = tbl_newhotel.objects.filter(place__district=tbl_district.objects.get(id=request.GET.get("did")),hotel_vstatus='1',hotel_ratings=request.GET.get("rate"),hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif ((request.GET.get("pid")!="") & (request.GET.get("spe")!="")):
+        data = tbl_newhotel.objects.filter(place=tbl_place.objects.get(id=request.GET.get("pid")),hotel_vstatus='1',hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif ((request.GET.get("did")!="") & (request.GET.get("spe")!="")):
+        data = tbl_newhotel.objects.filter(place__district=tbl_district.objects.get(id=request.GET.get("did")),hotel_vstatus='1',hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif ((request.GET.get("rate")!="") & (request.GET.get("spe")!="")):
+        data = tbl_newhotel.objects.filter(hotel_ratings=request.GET.get("rate"),hotel_vstatus='1',hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif ((request.GET.get("rate")!="") & (request.GET.get("pid")!="")):
+        data = tbl_newhotel.objects.filter(hotel_ratings=request.GET.get("rate"),hotel_vstatus='1',place=tbl_place.objects.get(id=request.GET.get("pid")))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif request.GET.get("spe")!="":
+        data = tbl_newhotel.objects.filter(hotel_spe=request.GET.get("spe"))
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif request.GET.get("pid")!="":
+        data = tbl_newhotel.objects.filter(place=tbl_place.objects.get(id=request.GET.get("pid")),hotel_vstatus='1')
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    elif request.GET.get("did")!="":
+        data = tbl_newhotel.objects.filter(place__district=request.GET.get("did"),hotel_vstatus='1')
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        print(datas)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})
+    else:
+        data = tbl_newhotel.objects.filter(hotel_ratings=request.GET.get("rate"),hotel_vstatus='1')
+        for i in data:
+            tot=0
+            ratecount=tbl_rating.objects.filter(hotel=i.id).count()
+            if ratecount>0:
+                ratedata=tbl_rating.objects.filter(hotel=i.id)
+                for j in ratedata:
+                    tot=tot+j.rating_data
+                    avg=tot//ratecount
+                    #print(avg)
+                parry.append(avg)
+            else:
+                parry.append(0)
+            # print(parry)
+        datas=zip(data,parry)
+        return render(request,"Guest/Ajax_Search_Hotel.html",{"data":datas,"ar":ar})

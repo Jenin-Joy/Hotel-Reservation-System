@@ -202,10 +202,16 @@ def acceptbooking(request,aid):
     data.booking_status=1
     data.save()
     return redirect("Hotel:userbooking")
+
 def rejectbooking(request,rid):
     data=tbl_booking.objects.get(id=rid)
     data.booking_status=2
     data.save()
+    room = tbl_roombooking.objects.filter(booking=rid)
+    for r in room:
+        rm =  tbl_roomdetails.objects.get(id=r.room_details_id)
+        rm.status = 0
+        rm.save()
     return redirect("Hotel:userbooking")
 
 def viewbookedrooms(request,bkid):
@@ -241,6 +247,9 @@ def sentconfirmation(request,id):
     hotal_address = booking.hotel.hotel_addr
     hotel_url = booking.hotel.hotel_url
     bkno = random.randint(111111,999999)
+    roomnos = []
+    for count in range(0,int(room)):
+        roomnos.append(random.randint(100,999))
     # print(user_email)
     if pickpack:
         send_mail(
@@ -254,7 +263,8 @@ def sentconfirmation(request,id):
             f"Check-out Date: {checkout}\r\n"
             f"Number of Guests: {nfg}\r\n"
             f"Room Count: {room}\r\n"
-            f"Rooms: {room_name}\r\n"
+            f"Room Name: {room_name}\r\n"
+            f"Rooms: {roomnos}\r\n"
             f"Meal Package: {mealpack}\r\n"
             f"Tour Package: {tourpack}\r\n"
             f"Total Amount: {amount}\r\n"
@@ -281,7 +291,8 @@ def sentconfirmation(request,id):
             f"Check-out Date: {checkout}\r\n"
             f"Number of Guests: {nfg}\r\n"
             f"Room Count: {room}\r\n"
-            f"Rooms: {room_name}\r\n"
+            f"Room Name: {room_name}\r\n"
+            f"Rooms: {roomnos}\r\n"
             f"Meal Package: {mealpack}\r\n"
             f"Tour Package: {tourpack}\r\n"
             f"Total Amount: {amount}\r\n"
@@ -318,6 +329,17 @@ def complaint(request):
 def mycomplaints(request):
     complaint=tbl_complaint.objects.filter(hotel=request.session["hid"])
     return render(request,"Hotel/Mycomplaints.html",{"complaint":complaint}) 
+
+def checkout(request,id):
+    bk = tbl_booking.objects.get(id=id)
+    bk.booking_status = 7
+    bk.save()
+    room = tbl_roombooking.objects.filter(booking=id)
+    for r in room:
+        rm =  tbl_roomdetails.objects.get(id=r.room_details_id)
+        rm.status = 0
+        rm.save()
+    return redirect("Hotel:userbooking")
 
 def logout(request):
     del request.session['hid']

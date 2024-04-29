@@ -39,6 +39,9 @@ urlpatterns = [
     path('Complaint/',views.complaint,name="complaint"),
     path('MyComplaints/',views.mycomplaints,name="mycomplaints"),
 
+    path('checkout/<int:id>',views.checkout,name="checkout"),
+
+
     path('logout/',views.logout,name="logout"),
 
 ]

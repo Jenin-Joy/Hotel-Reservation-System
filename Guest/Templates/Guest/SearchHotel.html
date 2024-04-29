@@ -121,7 +121,7 @@
             data: { did: did, },
             success: function (data) {
                 $("#sel_place").html(data);
-                var ur = "{% url 'User:ajaxsearchhotel' %}"
+                var ur = "{% url 'Guest:ajaxsearchhotel' %}"
                 $.ajax({
                     url: ur,
                     data: { pid: pid,did: did,rate: rate,spe: spe },
@@ -139,7 +139,7 @@
         var rate = document.getElementById("txt_rating").value
         var spe = document.getElementById("sel_spe").value
         // console.log(rate);
-        var ur = "{% url 'User:ajaxsearchhotel' %}"
+        var ur = "{% url 'Guest:ajaxsearchhotel' %}"
         $.ajax({
             url: ur,
             data: { pid: pid,did: did,rate: rate,spe: spe },

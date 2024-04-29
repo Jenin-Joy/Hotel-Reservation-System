@@ -11,6 +11,7 @@ urlpatterns = [
     path('Login/',views.Login,name="Login"),
 
 
+    path('ajaxsearchhotel/',views.ajaxsearchhotel,name="ajaxsearchhotel"),
 
 
     path('NewHotel/',views.hotelRegistration,name="hotelRegistration"),
