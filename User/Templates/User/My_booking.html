@@ -46,6 +46,9 @@
             <td>{{i.pickanddrophead.pickanddrophead_name}}</td>
             <td>{{i.tourpackages.tourpackages_name}}</td>
             <td>
+                {% if i.booking_amount == 0 %}
+                <span style="color: red;">Booking Not Completed</span>
+                {% else %}
                 {% if  i.booking_status == 0 %}
                 <span>Pending</span>    | <a href="{% url 'User:occupants' i.id %}">Add Occupents</a>
                 {% elif i.booking_status == 1%}
@@ -64,6 +67,7 @@
                 {% elif i.booking_status == 7 %}
                 <span>Check Out</span>
                 {% else %}
+                {% endif %}
                 {% endif %}
             </td>
         </tr>

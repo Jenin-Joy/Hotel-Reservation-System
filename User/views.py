@@ -280,7 +280,7 @@ def viewmore(request,hid):
     for i in roomdetails:
         roomdetails_id.append(i.id)
     # print(roomdetails_id)
-    rm_details = tbl_roomdetails.objects.filter(id__in=roomdetails_id,status=0)
+    rm_details = tbl_roomdetails.objects.filter(id__in=roomdetails_id)
     return render(request,"User/HotelDetailViewMore.html",{'data':data,'data1':data1,"id":hid,"facility":facility,"roomdetails":rm_details,"common":common_fac})
  else:
     return redirect("Guest:Login")
@@ -388,13 +388,23 @@ def roombooking(request,bkid):
     if request.method == "POST":
         bk = tbl_booking.objects.get(id=bkid)
         amount = 0
+        checkin = bk.booking_checkin.day
+        checkout = bk.booking_checkout.day
+        meal=tbl_mealpackages.objects.get(id=bk.mealpackages.id)
+        pickup=tbl_pickanddrophead.objects.get(id=bk.pickanddrophead.id)
+        tour=tbl_tourpackages.objects.get(id=bk.tourpackages.id)
+        # print(checkout)
+        diff = int(checkout) - int(checkin)
+        # print(diff)
         rooms = tbl_roombooking.objects.filter(booking=bkid,status=0)
         for r in rooms:
             amount = amount + int(r.room_details.roomdetails_amount)
             r.status = 1
             r.save()
             # print(amount)
-        bk.booking_amount = amount
+        amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
+        bkamounts = amount * diff
+        bk.booking_amount = amounts + bkamounts
         bk.save()
         return redirect("User:homepage")
     else:
@@ -416,7 +426,7 @@ def ajaxbookrooms(request):
                                     room_details=tbl_roomdetails.objects.get(id=rm.id))
         return JsonResponse({"msg":"Room Selected"})
     else:
-        return JsonResponse({"msg":"Not Room Available"})
+        return JsonResponse({"msg1":"Not Room Available"})
 
 def mybooking(request):
     if 'uid' in request.session:

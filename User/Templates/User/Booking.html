@@ -28,7 +28,7 @@
                     <td>{{forloop.counter}}</td>
                     <td>Floor Number</td>
                     <td>
-                        <select name="txtfloor{{forloop.counter}}" id="txtfloor{{forloop.counter}}" onchange="selRoomtype('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')">
+                        <select name="txtfloor{{forloop.counter}}" id="txtfloor{{forloop.counter}}" onchange="selRoomtype('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')" required>
                             <option value="">Select Floor</option>
                             {% for i in floornumberdata %}
                             <option value="{{i}}">{{i}}</option>
@@ -38,7 +38,7 @@
                     </td>
                     <td>Room Type</td>
                     <td>
-                        <select name="sel_roomtype{{forloop.counter}}" id="sel_roomtype{{forloop.counter}}" onchange="bookRooms('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')">
+                        <select name="sel_roomtype{{forloop.counter}}" id="sel_roomtype{{forloop.counter}}" onchange="bookRooms('txtfloor{{forloop.counter}}','sel_roomtype{{forloop.counter}}')" required>
                             <option value="">...Select...</option>
 
                         </select>
@@ -102,7 +102,15 @@
             data: { booking: booking,floor_number: floor_number,room: room },
             success: function (data) {
                 // $("#"+room).html(data);
-                alert(data.msg)
+                if(data.msg)
+                {
+                    alert(data.msg)
+                }
+                else{
+                    alert(data.msg1)
+                    document.getElementById(floor).value = ""
+                    document.getElementById(room).value = ""
+                }
             },
         });
     }

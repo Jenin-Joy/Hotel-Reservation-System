@@ -188,17 +188,17 @@ def userbooking(request):
 
 def acceptbooking(request,aid):
     data=tbl_booking.objects.get(id=aid)
-    meal=tbl_mealpackages.objects.get(id=data.mealpackages.id)
-    pickup=tbl_pickanddrophead.objects.get(id=data.pickanddrophead.id)
-    tour=tbl_tourpackages.objects.get(id=data.tourpackages.id)
+    # meal=tbl_mealpackages.objects.get(id=data.mealpackages.id)
+    # pickup=tbl_pickanddrophead.objects.get(id=data.pickanddrophead.id)
+    # tour=tbl_tourpackages.objects.get(id=data.tourpackages.id)
     # rtpe=tbl_roomtype.objects.get(id=data.roomtype.id)
     hotelid=tbl_newhotel.objects.get(id=data.hotel.id)
 
     # rom=tbl_roomdetails.objects.filter(roomtype=rtpe,hotel=hotelid).last()
     
-    amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
-    oldamount = data.booking_amount
-    data.booking_amount=oldamount + amounts
+    # amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
+    # oldamount = data.booking_amount
+    # data.booking_amount=oldamount + amounts
     data.booking_status=1
     data.save()
     return redirect("Hotel:userbooking")
