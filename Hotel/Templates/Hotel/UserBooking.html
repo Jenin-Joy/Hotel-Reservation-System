@@ -48,25 +48,29 @@
             <td>{{i.pickanddrophead.pickanddrophead_name}}</td>
             <td>{{i.tourpackages.tourpackages_name}}</td>
             <td>
-                {% if i.booking_status == 0 %}
-                <a href="{% url 'Hotel:acceptbooking' i.id %}">Accept</a>
-                <a href="{% url 'Hotel:rejectbooking' i.id %}"> Reject</a>
-                {% elif i.booking_status == 1 %}
-                Accepted
-                {% elif i.booking_status == 2 %}
-                Rejected
-                {% elif i.booking_status == 3 %}
-                Payed | <a href="{% url 'Hotel:sentconfirmation' i.id %}">Sent Confirmations</a> | <a href="{% url 'Hotel:viewbookedrooms' i.id %}">View Rooms</a> 
-                {% elif i.booking_status == 4 %}
-                Hotel Accepted
-                {% elif i.booking_status == 5 %}
-                Admin Accepted | <a href="{% url 'Hotel:checkout' i.id %}">Check Out</a>
-                {% elif i.booking_status == 6 %}
-                Booking Cancelled
-                {% elif i.booking_status == 7 %}
-                Check Out
+                {% if i.booking_amount == 0 %}
+                <span style="color: red;">Booking Not Completed</span>
                 {% else %}
-                pending
+                    {% if i.booking_status == 0 %}
+                    <a href="{% url 'Hotel:acceptbooking' i.id %}">Accept</a>
+                    <a href="{% url 'Hotel:rejectbooking' i.id %}"> Reject</a>
+                    {% elif i.booking_status == 1 %}
+                    Accepted
+                    {% elif i.booking_status == 2 %}
+                    Rejected
+                    {% elif i.booking_status == 3 %}
+                    Payed | <a href="{% url 'Hotel:sentconfirmation' i.id %}">Sent Confirmations</a> | <a href="{% url 'Hotel:viewbookedrooms' i.id %}">View Rooms</a> 
+                    {% elif i.booking_status == 4 %}
+                    Hotel Accepted
+                    {% elif i.booking_status == 5 %}
+                    Admin Accepted | <a href="{% url 'Hotel:checkout' i.id %}">Check Out</a>
+                    {% elif i.booking_status == 6 %}
+                    Booking Cancelled
+                    {% elif i.booking_status == 7 %}
+                    Check Out
+                    {% else %}
+                    pending
+                    {% endif %}
                 {% endif %}
             </td>
         </tr>

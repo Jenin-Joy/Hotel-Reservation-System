@@ -396,13 +396,13 @@ def roombooking(request,bkid):
         # print(checkout)
         diff = int(checkout) - int(checkin)
         # print(diff)
-        rooms = tbl_roombooking.objects.filter(booking=bkid,status=0)
+        rooms = tbl_roombooking.objects.filter(booking=bkid,status=1)
         for r in rooms:
             amount = amount + int(r.room_details.roomdetails_amount)
-            r.status = 1
+            r.status = 2
             r.save()
             # print(amount)
-        amounts=int(meal.mealpackages_amount)+int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
+        amounts=(int(meal.mealpackages_amount) * diff) +int(pickup.pickanddrophead_amount)+int(tour.tourpackages_amount)
         bkamounts = amount * diff
         bk.booking_amount = amounts + bkamounts
         bk.save()
@@ -414,16 +414,19 @@ def ajaxbookrooms(request):
     bk = tbl_booking.objects.get(id=request.GET.get("booking"))
     hotel = bk.hotel_id
     # print(hotel)
-    rmdetails = tbl_roomdetails.objects.filter(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"),status=0).count()
-    # print(rmdetails)
-    if rmdetails > 0:
-        rm = tbl_roomdetails.objects.get(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"),status=0)
-        rm.status = 1
-        rm.save()
+    rmdetails = tbl_roomdetails.objects.get(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"))
+    # print(rmdetails.roomdetails_count)
+    roombooking = tbl_roombooking.objects.filter(booking_floor=request.GET.get("floor_number"),room_details=rmdetails.id,roomtype=request.GET.get("room"),status__lte=2).count()
+    # print(roombooking)
+    if int(rmdetails.roomdetails_count) > int(roombooking):
+        # rm = tbl_roomdetails.objects.get(hotel=hotel,roomtype=request.GET.get("room"),roomdetails_floor=request.GET.get("floor_number"),status=0)
+        # rm.status = 1
+        # rm.save()
         tbl_roombooking.objects.create(booking_floor=request.GET.get("floor_number"),
                                     booking=tbl_booking.objects.get(id=request.GET.get("booking")),
                                     roomtype=tbl_roomtype.objects.get(id=request.GET.get("room")),
-                                    room_details=tbl_roomdetails.objects.get(id=rm.id))
+                                    room_details=tbl_roomdetails.objects.get(id=rmdetails.id),
+                                    status=1)
         return JsonResponse({"msg":"Room Selected"})
     else:
         return JsonResponse({"msg1":"Not Room Available"})

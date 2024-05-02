@@ -209,9 +209,8 @@ def rejectbooking(request,rid):
     data.save()
     room = tbl_roombooking.objects.filter(booking=rid)
     for r in room:
-        rm =  tbl_roomdetails.objects.get(id=r.room_details_id)
-        rm.status = 0
-        rm.save()
+        r.status=3
+        r.save()
     return redirect("Hotel:userbooking")
 
 def viewbookedrooms(request,bkid):
@@ -336,9 +335,8 @@ def checkout(request,id):
     bk.save()
     room = tbl_roombooking.objects.filter(booking=id)
     for r in room:
-        rm =  tbl_roomdetails.objects.get(id=r.room_details_id)
-        rm.status = 0
-        rm.save()
+        r.status=3
+        r.save()
     return redirect("Hotel:userbooking")
 
 def logout(request):
